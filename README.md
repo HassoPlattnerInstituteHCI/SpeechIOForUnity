@@ -40,11 +40,7 @@ This plugin works and tested on macOS Catalina or above, and Windows 10 (Windows
 
 ### OS setup
 
-Right now English / German / Japanese are supported. You need to install necessary language module from your OS setting.
-
-Derzeit werden Englisch / Deutsch / Japanisch unterstützt. Sie müssen das erforderliche Sprachmodul in Ihrer OS-einstellung installieren.
-
-今の所英語・ドイツ語・日本語に対応しています．OSの設定から必要な言語モジュールをインストールしてください．
+Right now English / Dutch/ German / Japanese are supported. You need to install necessary language module from your OS setting.
 
 ### Unity
 
