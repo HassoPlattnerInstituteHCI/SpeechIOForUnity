@@ -40,7 +40,7 @@ This plugin works and tested on macOS Catalina or above, and Windows 10 (Windows
 
 ### OS setup
 
-Right now English / Dutch/ German / Japanese are supported. You need to install necessary language module from your OS setting.
+Right now English / Dutch / German / Japanese are supported. You need to install necessary language module from your OS setting.
 
 ### Unity
 
@@ -60,10 +60,6 @@ Some macOS users will experience broken speech input due to missing dictation ki
 
 - XCode (mac)
 - Visual Studio (win, latest Windows SDK required)
-
-This package contains git submodule.
-
-` git clone --recursive https://github.com/HassoPlattnerInstituteHCI/SwiftVoiceCommandTest.git`
 
 ### Testing your NSSpeechRecognizer
 
