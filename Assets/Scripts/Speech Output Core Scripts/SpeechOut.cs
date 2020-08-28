@@ -13,9 +13,11 @@ namespace SpeechIO
     {
         SpeechBase speech;
         string lastSpoken;
-        // Use this for initialization
-        // outputchannel = optional parameter to select a specific channel, -1 takes your OSs default
-        public SpeechOut(int outputchannel = -1) 
+        /**
+         * constructor for SpeechOut
+         * @param outputchannel = optional parameter to select a specific channel, -1 takes your OSs default
+         */
+        public SpeechOut(int outputchannel = -1)
         {
             if (Application.platform == RuntimePlatform.OSXEditor || Application.platform == RuntimePlatform.OSXPlayer)
             {
@@ -27,16 +29,29 @@ namespace SpeechIO
             }
             Init(outputchannel);
         }
-        public void Init(int outputchannel)
+        private void Init(int outputchannel)
         {
             speech.Init(outputchannel);
         }
+        /**
+         * kills the OS process to send speechOut
+         * use this before you close down your application to avoid ghost processes on your OS
+         */
         public void Stop()
         {
             speech.Stop();
         }
-        public async Task Speak(string text)
+        /**
+         * sends the speech command to your OS' process
+         * note that it is asynchonously to ensure it finishes speaking if you call multiple times
+         * @param text - the string to be spoken
+         * @param speed - optional float to control the speed of speaking (defaults to 1.0)
+         * @param lang - optional parameter to control the language of speaking (defaults to english)
+         */
+        public async Task Speak(string text, float speed = 1.0f, SpeechBase.LANGUAGE lang = SpeechBase.LANGUAGE.ENGLISH)
         {
+            SetSpeed(speed);
+            SetLanguage(lang);
             speech.Speak(text);
             while (SpeechBase.isSpeaking)    // now wait until finished speaking
             {
@@ -45,23 +60,29 @@ namespace SpeechIO
             lastSpoken = text;
             return;
         }
-        public async Task Speak(string text, float speed = 1.0f, SpeechBase.LANGUAGE lang = SpeechBase.LANGUAGE.ENGLISH)
-        {
-            SetSpeed(speed);
-            SetLanguage(lang);
-            await Speak(text);
-        }
+        /**
+         * routine to repeat a spoken sentence
+         * useful to implement in combination with a metaCommand "repeat" in SpeechIn
+         */
         public async Task Repeat()
         {
             await Speak(lastSpoken);
         }
+        /**
+         * sets the language of the speech
+         * @param lang - language enum implemented in speechBase. For non-included languages contact us
+         */
         public void SetLanguage(SpeechBase.LANGUAGE lang)
         {
             SpeechBase.Language = lang;
         }
-        public void SetSpeed(float s)
+        /**
+         * sets the speed of the speech
+         * @param speed - float to determine how fast to speak relative to 1.0 (default)
+         */
+        public void SetSpeed(float speed)
         {
-            SpeechBase.speed = s;
+            SpeechBase.speed = speed;
         }
     }
 }

@@ -15,13 +15,22 @@ namespace SpeechIO
 
     public class DialogNode
     {
-        private List<DialogOption> options;
-        private string sentences;
-        private DialogAction action;
+        private List<DialogOption> options;   // the options to move on to other nodes
+        private string sentences;             // message to speak when node is active
+        private DialogAction action;          // action to perform when node is triggered
         private object actionarg;
-        private AudioSource soundSource;
-        private SpeechIn asr;
-        private SpeechOut tts;
+        private AudioSource soundSource;      // if playing sounds, a soundSource needs to be specified
+        private SpeechIn asr;                 // the speech recognition object from your app
+        private SpeechOut tts;                // the speech synthesis object from your app
+        /**
+         * constructor
+         * @param sentences - string with spoken sentences to speak when the node is active
+         * @param callBack - optional callback method in your app that should be called when the node is active
+         * @param param - parameters for the callback method
+         * override for playing audio files
+         * @param source - AudioSource in your Unity3D project that plays the file
+         * @param playSound - AudioClip which has to be played when the node is active
+         */
         public DialogNode(string sentences, DialogAction callback = null, object param = null)    {
             this.sentences = sentences;
             options = new List<DialogOption>();
@@ -37,6 +46,14 @@ namespace SpeechIO
             action = callback;
             actionarg = param;
         }
+        /**
+         * adds an option (edge) to the node that lead to activation of other nodes or events once this node is deactivated
+         * @param node - if only a node is provided, the node will automatically trigger that after it is deactivated
+         * override AddOption(string command, DialogNode node)
+         * @param command - command that should be spoken to trigger the specified node
+         * override AddOption(List<string> commands, DialogNode node)
+         * param commands - various commands that can be used to trigger the specified node (for example "yes","yea","ok")
+         */
         internal void AddOption(DialogNode node) {
             options.Add(new DialogOption(node));
             }
@@ -50,12 +67,16 @@ namespace SpeechIO
         {
             options.Add(new DialogOption(node, commands));
         }
+        /**
+         * efficiency method to add up to three options in one call
+         * and its override to do the same thing with single string triggers
+         */
         internal void AddOptions(   List<string> commands1 = null, DialogNode node1 = null,
                                     List<string> commands2 = null, DialogNode node2 = null,
                                     List<string> commands3 = null, DialogNode node3 = null)
         {
             AddOption(commands1, node1);
-            if (commands2 != null) 
+            if (commands2 != null)
                 AddOption(commands2, node2);
             if (commands3 != null)
                 AddOption(commands3, node3);
@@ -70,12 +91,22 @@ namespace SpeechIO
             if (command3 != null)
                 AddOption(command3, node3);
         }
+        /**
+         * plays a sound that was pre-defined when the node was created
+         */
         internal async Task playSound() {
             soundSource.Play();
             while (soundSource.isPlaying)
                 await Task.Delay(100);
             return;
         }
+        /**
+         * the routine to activate the node. When called externally this triggers the entire graph
+         * and will continue until a leaf node is reached
+         * @param speechIn - the SpeechIn object defined in your app. Avoid having multiple instances of this!
+         * @param speechout - the SpeechOut object defined in your app. Avoid having multiple instances of this!
+         * @param silent - optional parameter which defaults to false. If true it uses the node as a vehicle to progress in the graph without speaking or making any sound
+         */
         public async void Play(SpeechIn speechIn, SpeechOut speechOut, bool silent = false)
         {
             asr = speechIn;
@@ -87,7 +118,7 @@ namespace SpeechIO
             string recognized;
             switch (options.Count)
             {
-                case 0: //no options, endNode   
+                case 0: //no options, endNode
                     return;
                 case 1: //single option, listen without return
                     DialogOption singleOption = options.ToArray()[0];
@@ -109,6 +140,9 @@ namespace SpeechIO
                     return;
             }
         }
+        /**
+         * internal helper method that populates a string array with all commands that are specified by the options
+         */
         internal string[] GenerateCommandArray()
         {
             List<string> commandList = new List<string>();
@@ -116,6 +150,9 @@ namespace SpeechIO
                 commandList.AddRange(option.commands);
             return commandList.ToArray();
         }
+        /**
+         * if meta commands are defined, they should be handled appropriately
+         */
         internal bool CheckMetaCommands(string input)
         {
             if (asr.GetMetaCommands().Contains(input))
@@ -128,8 +165,8 @@ namespace SpeechIO
     }
     public class DialogOption
     {
-        public List<string> commands;
-        public DialogNode next;
+        public List<string> commands;   // the spoken command to traverse this edge in the graph
+        public DialogNode next;         // the node that should be triggered when this edge is traversed
         public DialogOption(DialogNode next, List<string> commands = null)
         {
             this.commands = commands;
