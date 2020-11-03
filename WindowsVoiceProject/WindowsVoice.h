@@ -8,19 +8,25 @@
 #include <list>
 #include <thread>
 
-namespace WindowsVoice {
-  extern "C" {
+namespace WindowsVoice
+{
+  extern "C"
+  {
     DLL_API void __cdecl initSpeech();
-    DLL_API void __cdecl addToSpeechQueue(const char* text);
+    DLL_API void __cdecl addToSpeechQueue(const char *text);
     DLL_API void __cdecl clearSpeechQueue();
     DLL_API void __cdecl destroySpeech();
-    DLL_API void __cdecl statusMessage(char* msg, int msgLen);
+    DLL_API void __cdecl statusMessage(char *msg, int msgLen);
+    DLL_API void __cdecl pauseSpeech();
+    DLL_API void __cdecl resumeSpeech();
   }
 
   std::mutex theMutex;
-  std::list<wchar_t*> theSpeechQueue;
-  std::thread* theSpeechThread = nullptr;
+  std::list<wchar_t *> theSpeechQueue;
+  std::thread *theSpeechThread = nullptr;
   bool shouldTerminate = false;
+  bool shouldPause = false;
+  bool shouldResume = false;
 
   std::wstring theStatusMessage;
-}
+} // namespace WindowsVoice

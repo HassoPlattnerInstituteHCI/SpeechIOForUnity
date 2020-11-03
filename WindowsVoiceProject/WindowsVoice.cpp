@@ -3,11 +3,12 @@
 #include "WindowsVoice.h"
 #include <sapi.h>
 //#include <iostream>
-namespace WindowsVoice {
+namespace WindowsVoice
+{
 
   void speechThreadFunc()
   {
-    ISpVoice * pVoice = NULL;
+    ISpVoice *pVoice = NULL;
 
     if (FAILED(::CoInitializeEx(NULL, COINITBASE_MULTITHREADED)))
     {
@@ -21,13 +22,13 @@ namespace WindowsVoice {
       LPSTR pText = 0;
 
       ::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-        NULL, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), pText, 0, NULL);
+                      NULL, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), pText, 0, NULL);
       LocalFree(pText);
       theStatusMessage = L"Failed to create Voice instance.";
       return;
     }
     theStatusMessage = L"Speech ready.";
-/*
+    /*
 
     //std::cout << "Speech ready.\n";
     wchar_t* priorText = nullptr;
@@ -63,9 +64,19 @@ namespace WindowsVoice {
     pVoice->Release();
 */
     SPVOICESTATUS voiceStatus;
-    wchar_t* priorText = nullptr;
+    wchar_t *priorText = nullptr;
     while (!shouldTerminate)
     {
+      if (shouldPause)
+      {
+        pVoice->Pause();
+        shouldPause = false;
+      }
+      if (shouldResume)
+      {
+        pVoice->Resume();
+        shouldResume = false;
+      }
       pVoice->GetStatus(&voiceStatus, NULL);
       if (voiceStatus.dwRunningState == SPRS_IS_SPEAKING)
       {
@@ -114,7 +125,7 @@ namespace WindowsVoice {
     theStatusMessage = L"Speech thread terminated.";
   }
 
-  void addToSpeechQueue(const char* text)
+  void addToSpeechQueue(const char *text)
   {
     if (text)
     {
@@ -162,13 +173,20 @@ namespace WindowsVoice {
     CoUninitialize();
     theStatusMessage = L"Speech destroyed.";
   }
-  void statusMessage(char* msg, int msgLen)
+  void pauseSpeech()
+  {
+    shouldPause = true;
+  }
+  void resumeSpeech()
+  {
+    shouldResume = true;
+  }
+  void statusMessage(char *msg, int msgLen)
   {
     size_t count;
     wcstombs_s(&count, msg, msgLen, theStatusMessage.c_str(), msgLen);
   }
-}
-
+} // namespace WindowsVoice
 
 BOOL APIENTRY DllMain(HMODULE, DWORD ul_reason_for_call, LPVOID)
 {
@@ -180,6 +198,6 @@ BOOL APIENTRY DllMain(HMODULE, DWORD ul_reason_for_call, LPVOID)
   case DLL_PROCESS_DETACH:
     break;
   }
-  
+
   return TRUE;
 }

@@ -37,6 +37,14 @@ namespace SpeechIO
          * kills the OS process to send speechOut
          * use this before you close down your application to avoid ghost processes on your OS
          */
+        public void Pause()
+        {
+            speech.Pause();
+        }
+        public void Resume()
+        {
+            speech.Resume();
+        }
         public void Stop()
         {
             speech.Stop();
