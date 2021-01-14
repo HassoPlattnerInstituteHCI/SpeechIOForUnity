@@ -84,5 +84,9 @@ namespace SpeechIO
         {
             SpeechBase.speed = speed;
         }
+        public bool IsSpeaking()
+        {
+            return SpeechBase.isSpeaking;
+        }
     }
 }
