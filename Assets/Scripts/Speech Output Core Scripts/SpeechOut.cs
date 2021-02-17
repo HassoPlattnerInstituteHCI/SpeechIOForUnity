@@ -6,6 +6,7 @@
 
 using UnityEngine;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace SpeechIO
 {
@@ -43,18 +44,23 @@ namespace SpeechIO
         }
         /**
          * sends the speech command to your OS' process
-         * note that it is asynchonously to ensure it finishes speaking if you call multiple times
+         * note that it is asynchronously to ensure it finishes speaking if you call multiple times
          * @param text - the string to be spoken
          * @param speed - optional float to control the speed of speaking (defaults to 1.0)
          * @param lang - optional parameter to control the language of speaking (defaults to english)
          */
-        public async Task Speak(string text, float speed = 1.0f, SpeechBase.LANGUAGE lang = SpeechBase.LANGUAGE.ENGLISH)
+        public async Task Speak(string text, float speed = 1.0f, SpeechBase.LANGUAGE lang = SpeechBase.LANGUAGE.ENGLISH, CancellationToken? token = null)
         {
             SetSpeed(speed);
             SetLanguage(lang);
             speech.Speak(text);
             while (SpeechBase.isSpeaking)    // now wait until finished speaking
             {
+                if (token != null && ((CancellationToken)token).IsCancellationRequested)
+                {
+                    Stop();
+                    break;
+                }
                 await Task.Delay(100);
             }
             lastSpoken = text;
@@ -64,9 +70,9 @@ namespace SpeechIO
          * routine to repeat a spoken sentence
          * useful to implement in combination with a metaCommand "repeat" in SpeechIn
          */
-        public async Task Repeat()
+        public async Task Repeat(CancellationToken? token = null)
         {
-            await Speak(lastSpoken);
+            await Speak(lastSpoken, token: token);
         }
         /**
          * sets the language of the speech
