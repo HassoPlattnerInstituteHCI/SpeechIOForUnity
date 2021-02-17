@@ -3,25 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Windows.Speech;
 
-public class WindowsSpeechIn : VoiceCommandBase {
+public class WindowsSpeechIn : VoiceCommandBase
+{
     private KeywordRecognizer recognizer;
     public ConfidenceLevel confidence = ConfidenceLevel.Medium;
     private List<string> usedCommands = new List<string>();
 
-    public WindowsSpeechIn(OnRecognized onRecognized):base(VoiceCommandBase.onRecognized){
+    public WindowsSpeechIn(OnRecognized onRecognized) : base(VoiceCommandBase.onRecognized)
+    {
         VoiceCommandBase.onRecognized = onRecognized;
-        VoiceCommandBase.commands = new string[]{}; //default
+        VoiceCommandBase.commands = new string[] { }; //default
     }
 
-    public WindowsSpeechIn(OnRecognized　onRecognized, string[] commands):base(VoiceCommandBase.onRecognized,commands){
-      VoiceCommandBase.onRecognized = onRecognized;
-      VoiceCommandBase.commands = commands;
+    public WindowsSpeechIn(OnRecognized onRecognized, string[] commands) : base(VoiceCommandBase.onRecognized, commands)
+    {
+        VoiceCommandBase.onRecognized = onRecognized;
+        VoiceCommandBase.commands = commands;
     }
 
-    public override void StartListening(){
+    public override void StartListening()
+    {
         if (VoiceCommandBase.commands != null) //???
         {
-            if (recognizer != null) {
+            if (recognizer != null)
+            {
                 recognizer.Dispose();
             }
             recognizer = new KeywordRecognizer(VoiceCommandBase.commands, confidence);
@@ -30,37 +35,45 @@ public class WindowsSpeechIn : VoiceCommandBase {
         }
     }
 
-    public override void StartListening(string[] commands){
+    public override void StartListening(string[] commands)
+    {
         if (commands != null) //???
         {
             List<string> commandsToAdd = new List<string>();
-            foreach(string c in commands){
-                if(usedCommands.Find(x => x==c)!=c){
+            foreach (string c in commands)
+            {
+                if (usedCommands.Find(x => x == c) != c)
+                {
                     commandsToAdd.Add(c);
                 }
             }
-            Debug.Log(commandsToAdd);
             string[] _commandsToAdd = commandsToAdd.ToArray();
-            recognizer = new KeywordRecognizer(_commandsToAdd, confidence);
+            if (_commandsToAdd.Length != 0) recognizer = new KeywordRecognizer(_commandsToAdd, confidence);
             recognizer.OnPhraseRecognized += Recognizer_OnPhraseRecognized;
             recognizer.Start();
             string list = "";
-            foreach(string c in commands){list+= c + ",";}
-            Debug.Log("[WinSpeech] awaiting:"+list);
-            foreach(string c in commands){
-                if(usedCommands.Find(x => x==c)!=c){
+            foreach (string c in commands) { list += c + ","; }
+            Debug.Log("[WinSpeech] awaiting:" + list);
+            foreach (string c in commands)
+            {
+                if (usedCommands.Find(x => x == c) != c)
+                {
                     usedCommands.Add(c);
                 }
             }
         }
     }
-    public override void PauseListening(){
-        if (recognizer != null) {
+    public override void PauseListening()
+    {
+        if (recognizer != null)
+        {
             recognizer.Stop(); //only makes a difference in macOS in windows Stop has same functionality
         }
     }
-    public override void StopListening(){
-        if (recognizer != null) {
+    public override void StopListening()
+    {
+        if (recognizer != null)
+        {
             recognizer.Stop();
         }
     }
