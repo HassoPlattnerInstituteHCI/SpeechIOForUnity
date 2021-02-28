@@ -21,11 +21,14 @@ namespace SpeechIO
         {
             if (Application.platform == RuntimePlatform.OSXEditor || Application.platform == RuntimePlatform.OSXPlayer)
             {
-                speech = new MacOSSPeechOut();
+                speech = new MacOSSpeechOut();
             }
             else if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
             {
                 speech = new WindowsSpeechOut();
+            }
+            else if (Application.platform == RuntimePlatform.LinuxEditor || Application.platform == RuntimePlatform.LinuxPlayer) {
+                speech = new LinuxSpeechOut();
             }
             Init(outputchannel);
         }

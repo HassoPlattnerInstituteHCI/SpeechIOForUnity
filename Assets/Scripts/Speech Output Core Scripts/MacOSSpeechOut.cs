@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using UnityEngine;
-public class MacOSSPeechOut : SpeechBase
+public class MacOSSpeechOut : SpeechBase
 {
     public int outputchannel;
     System.Diagnostics.Process speechProcess;
