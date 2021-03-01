@@ -39,9 +39,8 @@ public class WindowsSpeechIn : VoiceCommandBase {
                     commandsToAdd.Add(c);
                 }
             }
-            Debug.Log(commandsToAdd);
             string[] _commandsToAdd = commandsToAdd.ToArray();
-            recognizer = new KeywordRecognizer(_commandsToAdd, confidence);
+            if (_commandsToAdd.Length != 0) recognizer = new KeywordRecognizer(_commandsToAdd, confidence);
             recognizer.OnPhraseRecognized += Recognizer_OnPhraseRecognized;
             recognizer.Start();
             string list = "";
