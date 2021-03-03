@@ -198,3 +198,16 @@ crashlytics-build.properties
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 # End of https://www.gitignore.io/api/xcode,unity,macos,objective-c,monodevelop,visualstudiocode
+
+## Meta files when included as a submodule
+Assets.meta
+Library.meta
+LICENSE.meta
+NSSpeechForUnity.meta
+NSSpeechForUnity/**/*.meta
+README.md.meta
+NSSpeechTest.meta
+Packages.meta
+ProjectSettings.meta
+WindowsVoiceProject.meta
+WindowsVoiceProject/*.meta
