@@ -18,11 +18,9 @@ public class LinuxSpeechOut : SpeechBase
     }
     public override async void Speak(string text)
     {
-        string cmdArgs;
         Debug.Log("[Linux] Speaking: " + text);
-
-        speechProcess = System.Diagnostics.Process.Start("/usr/bin/espeak", text);
         SpeechBase.isSpeaking = true;
+        speechProcess = System.Diagnostics.Process.Start("/usr/bin/espeak", "\"" + text + "\"");
         while (!speechProcess.HasExited)    // now wait until finished speaking
         {
             await Task.Delay(100);
