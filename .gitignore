@@ -207,6 +207,7 @@ NSSpeechForUnity.meta
 NSSpeechForUnity/**/*.meta
 README.md.meta
 NSSpeechTest.meta
+NSSpeechTest/*.meta
 NSSpeechTest/**/*.meta
 Packages.meta
 ProjectSettings.meta
