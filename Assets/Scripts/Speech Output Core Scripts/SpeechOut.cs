@@ -21,7 +21,7 @@ namespace SpeechIO
         {
             if (Application.platform == RuntimePlatform.OSXEditor || Application.platform == RuntimePlatform.OSXPlayer)
             {
-                speech = new MacOSSpeechOut();
+                speech = new MacOSSPeechOut();
             }
             else if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
             {
