@@ -14,7 +14,8 @@ public class MySpeechOutScript : MonoBehaviour
         Dialog();
     }
 
-    public async void Dialog(){
+    public async void Dialog()
+    {
         await speechOut.Speak("This is a sample speech output script.");
         await speechOut.Speak("If you hear my voice, the speech out system is functional.");
         await speechOut.Speak("You may hear me in a different accent. If that's the case, please check your OS speech settings.");
@@ -23,10 +24,11 @@ public class MySpeechOutScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    void OnApplicationQuit(){
+    void OnApplicationQuit()
+    {
         speechOut.Stop(); //Windows: do not remove this line.
     }
 

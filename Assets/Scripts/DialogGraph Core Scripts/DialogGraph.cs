@@ -31,13 +31,14 @@ namespace SpeechIO
          * @param source - AudioSource in your Unity3D project that plays the file
          * @param playSound - AudioClip which has to be played when the node is active
          */
-        public DialogNode(string sentences, DialogAction callback = null, object param = null)    {
+        public DialogNode(string sentences, DialogAction callback = null, object param = null)
+        {
             this.sentences = sentences;
             options = new List<DialogOption>();
             action = callback;
             actionarg = param;
         }
-        public DialogNode(AudioSource source,AudioClip playSound, DialogAction callback = null, object param = null)
+        public DialogNode(AudioSource source, AudioClip playSound, DialogAction callback = null, object param = null)
         {
             sentences = "";
             soundSource = source;
@@ -54,9 +55,10 @@ namespace SpeechIO
          * override AddOption(List<string> commands, DialogNode node)
          * param commands - various commands that can be used to trigger the specified node (for example "yes","yea","ok")
          */
-        internal void AddOption(DialogNode node) {
+        internal void AddOption(DialogNode node)
+        {
             options.Add(new DialogOption(node));
-            }
+        }
         internal void AddOption(string command, DialogNode node)
         {
             List<string> commands = new List<string>();
@@ -71,7 +73,7 @@ namespace SpeechIO
          * efficiency method to add up to three options in one call
          * and its override to do the same thing with single string triggers
          */
-        internal void AddOptions(   List<string> commands1 = null, DialogNode node1 = null,
+        internal void AddOptions(List<string> commands1 = null, DialogNode node1 = null,
                                     List<string> commands2 = null, DialogNode node2 = null,
                                     List<string> commands3 = null, DialogNode node3 = null)
         {
@@ -81,7 +83,7 @@ namespace SpeechIO
             if (commands3 != null)
                 AddOption(commands3, node3);
         }
-        internal void AddOptions(   string command1 = null, DialogNode node1 = null,
+        internal void AddOptions(string command1 = null, DialogNode node1 = null,
                                     string command2 = null, DialogNode node2 = null,
                                     string command3 = null, DialogNode node3 = null)
         {
@@ -94,7 +96,8 @@ namespace SpeechIO
         /**
          * plays a sound that was pre-defined when the node was created
          */
-        internal async Task playSound() {
+        internal async Task playSound()
+        {
             soundSource.Play();
             while (soundSource.isPlaying)
                 await Task.Delay(100);
