@@ -5,10 +5,12 @@ public class MacOSSPeechOut : SpeechBase
 {
     public int outputchannel;
     System.Diagnostics.Process speechProcess;
-    public override void Init(int outputchannel){
+    public override void Init(int outputchannel)
+    {
         this.outputchannel = outputchannel;
     }
-    public override void Stop(){
+    public override void Stop()
+    {
         if (speechProcess != null)
             if (!speechProcess.HasExited)
                 speechProcess.Kill();
@@ -30,21 +32,23 @@ public class MacOSSPeechOut : SpeechBase
             else
                 cmdArgs = string.Format("-r {0} -a {1} -v {2} \"{3}\" ", rate, outputchannel, voice, text.Replace("\"", ","));
         }
-        speechProcess =  System.Diagnostics.Process.Start("/usr/bin/say", cmdArgs);
+        speechProcess = System.Diagnostics.Process.Start("/usr/bin/say", cmdArgs);
         SpeechBase.isSpeaking = true;
         while (!speechProcess.HasExited)    // now wait until finished speaking
         {
             await Task.Delay(100);
         }
         if (speechProcess.ExitCode == 1)
-        { 
+        {
             throw new System.OperationCanceledException("say process terminated with exit code -1. debug: is say in /usr/bin/? (open terminal: which say) and does the selected outputchannel work (open terminal: say -a <outputchannel> testing)");
         }
         SpeechBase.isSpeaking = false;
         return;
     }
-    private string GetLangVoice(){
-        switch(Language){
+    private string GetLangVoice()
+    {
+        switch (Language)
+        {
             case LANGUAGE.DUTCH:
                 return "Xander";
             case LANGUAGE.ENGLISH:

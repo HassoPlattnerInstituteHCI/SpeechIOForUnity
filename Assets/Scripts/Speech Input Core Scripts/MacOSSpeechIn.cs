@@ -50,7 +50,7 @@ public class MacOSSpeechIn : VoiceCommandBase
   private static extern void _addCommand(string command);
   [DllImport("NSSpeechForUnity")]
   private static extern void _clearCommand();
-  
+
   public static void InitLogCallback() {
     if (Application.platform == RuntimePlatform.OSXEditor) {
         _initLogCallback(LogReceived);

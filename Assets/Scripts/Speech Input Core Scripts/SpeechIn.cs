@@ -93,34 +93,37 @@ namespace SpeechIO
          * override function Listen (Dictionary<string, KeyCode> dict)
          *  @param dict - a dictionary of commands and keycodes to specify what keycode overrides which command
          */
-         public async Task<string> Listen(string[] commands, bool shortkey = true)
-         {
-             activeCommands = commands;
-             recognizer.StartListening(AppendMetaCommands(commands));
-             while (!VoiceCommandBase.isRecognized())
-             {
-                 if (shortkey) {
-                     if (Input.GetKey("1"))
-                         recognizer.KeyTriggered(commands[0]);
-                     else if (Input.GetKey("2") && commands.Length>1)
-                         recognizer.KeyTriggered(commands[1]);
-                     else if (Input.GetKey("3") && commands.Length > 2)
-                         recognizer.KeyTriggered(commands[2]);
-                 }
-                 await Task.Delay(100);
-             }
-             recognizer.PauseListening();
-             VoiceCommandBase.setRecognized(false);
-             return VoiceCommandBase.recognized;
-         }
+        public async Task<string> Listen(string[] commands, bool shortkey = true)
+        {
+            activeCommands = commands;
+            recognizer.StartListening(AppendMetaCommands(commands));
+            while (!VoiceCommandBase.isRecognized())
+            {
+                if (shortkey)
+                {
+                    if (Input.GetKey("1"))
+                        recognizer.KeyTriggered(commands[0]);
+                    else if (Input.GetKey("2") && commands.Length > 1)
+                        recognizer.KeyTriggered(commands[1]);
+                    else if (Input.GetKey("3") && commands.Length > 2)
+                        recognizer.KeyTriggered(commands[2]);
+                }
+                await Task.Delay(100);
+            }
+            recognizer.PauseListening();
+            VoiceCommandBase.setRecognized(false);
+            return VoiceCommandBase.recognized;
+        }
         public async Task<string> Listen(Dictionary<string, KeyCode> dict)
         {
             activeCommands = dict.Keys.ToArray<string>();
             recognizer.StartListening(AppendMetaCommands(activeCommands));
             while (!VoiceCommandBase.isRecognized())
             {
-                foreach (KeyValuePair<string, KeyCode> command in dict) {
-                    if (Input.GetKey(command.Value)) {
+                foreach (KeyValuePair<string, KeyCode> command in dict)
+                {
+                    if (Input.GetKey(command.Value))
+                    {
                         recognizer.KeyTriggered(command.Key);
                     }
                 }
