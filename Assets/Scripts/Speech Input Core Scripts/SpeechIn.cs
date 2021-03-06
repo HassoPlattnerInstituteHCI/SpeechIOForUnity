@@ -36,6 +36,10 @@ namespace SpeechIO
                     Application.platform == RuntimePlatform.WindowsPlayer)
             {
                 recognizer = new WindowsSpeechIn(onRecognized);
+            } else if (Application.platform == RuntimePlatform.LinuxEditor ||
+                    Application.platform == RuntimePlatform.LinuxPlayer)
+            {
+                recognizer = new LinuxSpeechIn(onRecognized);
             }
         }
         public SpeechIn(VoiceCommandBase.OnRecognized onRecognized, string[] commands)
@@ -49,6 +53,10 @@ namespace SpeechIO
                     Application.platform == RuntimePlatform.WindowsPlayer)
             {
                 recognizer = new WindowsSpeechIn(onRecognized, commands);
+            } else if (Application.platform == RuntimePlatform.LinuxEditor ||
+                    Application.platform == RuntimePlatform.LinuxPlayer)
+            {
+                recognizer = new LinuxSpeechIn(onRecognized, commands);
             }
         }
         public string[] GetActiveCommands()

@@ -27,6 +27,9 @@ namespace SpeechIO
             {
                 speech = new WindowsSpeechOut();
             }
+            else if (Application.platform == RuntimePlatform.LinuxEditor || Application.platform == RuntimePlatform.LinuxPlayer) {
+                speech = new LinuxSpeechOut();
+            }
             Init(outputchannel);
         }
         private void Init(int outputchannel)

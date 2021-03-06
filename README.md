@@ -1,5 +1,5 @@
 <h1 align="center">SpeechIOForUnity</h1>
-<p align="center">A ready-to-use Unity plugin for Speech Input/Output using native Speech API of <i>both</i> Apple macOS and MS Windows.</p>
+<p align="center">A ready-to-use Unity plugin for Speech Input/Output using native Speech API of <i>both</i> Apple macOS and MS Windows, as well as partial support for Linux.</p>
 <p align="center">Author: Jotaro Shigeyama and Thijs Roumen</p>
 
 
@@ -36,11 +36,12 @@ This project repo contains
 
 ## Installation
 
-This plugin works and tested on macOS Catalina or above, and Windows 10 (Windows 8 is not supported).
+This plugin works and tested on macOS Catalina or above, and Windows 10 (Windows 8 is not supported). On Linux only Speech output is supported.
 
 ### OS setup
 
 Right now English / Dutch / German / Japanese are supported. You need to install necessary language module from your OS setting.
+On Linux you will need to install `espeak` for the Speech output.
 
 ### Unity
 
