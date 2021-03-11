@@ -14,6 +14,6 @@ public abstract class SpeechBase
     public abstract void Init(int outputchannel);
     public abstract void Speak(string text);
     public abstract void Stop();
-    public void SetLanguage(LANGUAGE lang){Language = lang;}
-    public void SetSpeed(float s){speed = s;}
+    public void SetLanguage(LANGUAGE lang) { Language = lang; }
+    public void SetSpeed(float s) { speed = s; }
 }
