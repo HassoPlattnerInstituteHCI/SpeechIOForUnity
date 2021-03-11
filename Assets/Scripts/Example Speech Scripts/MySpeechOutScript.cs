@@ -11,6 +11,7 @@ public class MySpeechOutScript : MonoBehaviour
     CancellationTokenSource source;
     void Start()
     {
+        // Addind a CancellationToken is only necessary if you wish to stop speechout
         source = new CancellationTokenSource();
         CancellationToken token = source.Token;
         speechOut = new SpeechOut();
