@@ -11,7 +11,6 @@ public class MySpeechOutScript : MonoBehaviour
     CancellationTokenSource source;
     void Start()
     {
-        // Addind a CancellationToken is only necessary if you wish to stop speechout
         source = new CancellationTokenSource();
         CancellationToken token = source.Token;
         speechOut = new SpeechOut();
@@ -20,9 +19,9 @@ public class MySpeechOutScript : MonoBehaviour
 
     public async void Dialog(CancellationToken token)
     {
-        await speechOut.Speak("This is a sample speech output script.", token: token);
-        await speechOut.Speak("If you hear my voice, the speech out system is functional.", token: token);
-        await speechOut.Speak("You may hear me in a different accent. If that's the case, please check your OS speech settings.", token: token);
+        await speechOut.Speak("This is a cancellable speech output script.", token: token);
+        await speechOut.Speak("Press space at any time to stop speech out put", token: token);
+        await speechOut.Speak("You can add a cancellation token to any speech output", token: token);
     }
 
     void Update()
