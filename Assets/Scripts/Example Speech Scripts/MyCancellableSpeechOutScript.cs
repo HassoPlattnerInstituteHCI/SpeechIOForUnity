@@ -5,7 +5,7 @@ using System.Threading.Tasks; //note that you need to include this if you want t
 using System.Threading;
 using SpeechIO;
 
-public class MySpeechOutScript : MonoBehaviour
+public class MyCancellableSpeechOutScript : MonoBehaviour
 {
     SpeechOut speechOut;
     CancellationTokenSource source;
