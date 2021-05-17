@@ -19,7 +19,7 @@ public class WindowsSpeechOut : SpeechBase
     public bool IsSpeaking()
     {
         string message = GetStatusMessage();
-        if (message == "Waiting.") return false;
+        if (message == "Waiting." || message=="Speech destroyed.") return false;
         else return true;
     }
     public static void _speak(string msg, float delay = 0f)
@@ -61,6 +61,7 @@ public class WindowsSpeechOut : SpeechBase
         {
             Debug.Log("[WinSpeech]:Destroying speech");
             destroySpeech();
+            clearSpeechQueue();
             Debug.Log("[WinSpeech]:Speech destroyed");
             theVoice = null;
         }

@@ -12,6 +12,8 @@ public class WindowsVoice : MonoBehaviour {
   public static extern void addToSpeechQueue(string s);
   [DllImport("WindowsVoice")]
   public static extern void statusMessage(StringBuilder str, int length);
+  [DllImport("WindowsVoice")]
+  public static extern void clearSpeechQueue();
 
   public static WindowsVoice theVoice = null;
 	// Use this for initialization
