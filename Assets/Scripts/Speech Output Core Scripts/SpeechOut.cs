@@ -13,6 +13,8 @@ namespace SpeechIO
     public class SpeechOut
     {
         SpeechBase speech;
+        CancellationTokenSource source;
+        CancellationToken token;
         string lastSpoken;
         /**
          * constructor for SpeechOut
@@ -32,6 +34,8 @@ namespace SpeechIO
                 speech = new LinuxSpeechOut();
             }
             Init(outputchannel);
+            source = new CancellationTokenSource();
+            token = source.Token;
         }
         private void Init(int outputchannel)
         {
@@ -39,11 +43,15 @@ namespace SpeechIO
         }
         /**
          * kills the OS process to send speechOut
+         * if using the default stopAll it kills all ongoing speech by calling with stopAll = false it will only kill the last spoken one
          * use this before you close down your application to avoid ghost processes on your OS
          */
-        public void Stop()
+        public void Stop(bool stopAll = true)
         {
-            speech.Stop();
+            if (stopAll)
+                source.Cancel();
+            else
+                speech.Stop();
         }
         /**
          * sends the speech command to your OS' process
@@ -52,7 +60,7 @@ namespace SpeechIO
          * @param speed - optional float to control the speed of speaking (defaults to 1.0)
          * @param lang - optional parameter to control the language of speaking (defaults to english)
          */
-        public async Task Speak(string text, float speed = 1.0f, SpeechBase.LANGUAGE lang = SpeechBase.LANGUAGE.ENGLISH, CancellationToken? token = null)
+        public async Task Speak(string text, float speed = 1.0f, SpeechBase.LANGUAGE lang = SpeechBase.LANGUAGE.ENGLISH)
         {
             SetSpeed(speed);
             SetLanguage(lang);
@@ -61,7 +69,7 @@ namespace SpeechIO
             {
                 if (token != null && ((CancellationToken)token).IsCancellationRequested)
                 {
-                    Stop();
+                    Stop(false);
                     break;
                 }
                 await Task.Delay(100);
@@ -73,9 +81,9 @@ namespace SpeechIO
          * routine to repeat a spoken sentence
          * useful to implement in combination with a metaCommand "repeat" in SpeechIn
          */
-        public async Task Repeat(CancellationToken? token = null)
+        public async Task Repeat()
         {
-            await Speak(lastSpoken, token: token);
+            await Speak(lastSpoken);
         }
         /**
          * sets the language of the speech
